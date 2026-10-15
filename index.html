@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f04467">
+  <title>ACDC — Audio Comics Daily Conversation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="ACDC home">
+      <span class="brand-mark">A</span>
+      <span><strong>ACDC</strong><small>Audio Comics Daily Conversation</small></span>
+    </a>
+    <span class="unit-pill" id="unitBadge">UNIT 01</span>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">SCAN • READ • LISTEN • SPEAK</p>
+      <h1 id="unitTitle">Greetings and Introductions</h1>
+      <p id="unitDescription">Meet a new friend and practise a simple English conversation.</p>
+    </section>
+
+    <nav class="unit-nav" aria-label="Choose conversation unit">
+      <label for="unitSelect">Choose a conversation</label>
+      <select id="unitSelect">
+        <option value="greetings">01 · Greetings and Introductions</option>
+        <option value="school">02 · At School</option>
+        <option value="hobbies">03 · Talking about Hobbies</option>
+      </select>
+    </nav>
+
+    <section class="comic-card" aria-label="Digital comic">
+      <div class="comic-heading">
+        <span class="comic-label">ACDC COMIC</span>
+        <span id="sceneNumber">SCENE 01</span>
+      </div>
+      <div class="comic-scene" id="comicScene">
+        <div class="character character-left" id="characterA">
+          <div class="speech" id="bubbleA">Hi! What's your name?</div>
+          <div class="avatar avatar-boy" aria-hidden="true"><span class="hair"></span><span class="eyes">• •</span><span class="smile"></span></div>
+          <div class="character-name" id="nameA">Alex</div>
+        </div>
+        <div class="scene-divider" aria-hidden="true">✦</div>
+        <div class="character character-right" id="characterB">
+          <div class="speech" id="bubbleB">Hello! I'm Maya.</div>
+          <div class="avatar avatar-girl" aria-hidden="true"><span class="hair"></span><span class="eyes">• •</span><span class="smile"></span></div>
+          <div class="character-name" id="nameB">Maya</div>
+        </div>
+      </div>
+      <div class="scene-caption" id="sceneCaption">Two students meet for the first time.</div>
+    </section>
+
+    <section class="conversation">
+      <div class="section-heading">
+        <div><p class="eyebrow">LISTEN & REPEAT</p><h2>Conversation</h2></div>
+        <button class="button button-soft" id="playAllBtn" type="button">▶ Play all</button>
+      </div>
+      <div id="dialogueList" class="dialogue-list"></div>
+      <p class="audio-note">Demo audio uses your browser's text-to-speech voice. Replace it with recorded MP3 files for the final research product.</p>
+    </section>
+
+    <section class="practice-card">
+      <div class="practice-icon">🎤</div>
+      <div class="practice-copy">
+        <p class="eyebrow">YOUR TURN</p>
+        <h2>Practise speaking</h2>
+        <p>Listen to the conversation, then practise saying each line aloud with a partner.</p>
+      </div>
+      <button class="button button-primary" id="practiceBtn" type="button">Start practice</button>
+      <p class="practice-status" id="practiceStatus" aria-live="polite"></p>
+    </section>
+
+    <footer>
+      <span>ACDC · English learning companion</span>
+      <span>Made for learning, one conversation at a time.</span>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
