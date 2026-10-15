@@ -1,169 +1,27 @@
-const units = {
-  greetings: {
-    number: "01",
-    title: "Greetings and Introductions",
-    description: "Meet a new friend and practise a simple English conversation.",
-    caption: "Two students meet for the first time.",
-    names: ["Alex", "Maya"],
-    dialogues: [
-      { speaker: "Alex", side: "a", text: "Hi! What's your name?" },
-      { speaker: "Maya", side: "b", text: "Hello! I'm Maya. What's your name?" },
-      { speaker: "Alex", side: "a", text: "I'm Alex. Nice to meet you." },
-      { speaker: "Maya", side: "b", text: "Nice to meet you, too!" }
-    ]
-  },
-  school: {
-    number: "02",
-    title: "At School",
-    description: "Practise a short conversation with a classmate at school.",
-    caption: "Two classmates talk before the lesson begins.",
-    names: ["Alex", "Maya"],
-    dialogues: [
-      { speaker: "Alex", side: "a", text: "Good morning, Maya." },
-      { speaker: "Maya", side: "b", text: "Good morning, Alex. How are you?" },
-      { speaker: "Alex", side: "a", text: "I'm fine, thank you. And you?" },
-      { speaker: "Maya", side: "b", text: "I'm great. Are you ready for English class?" },
-      { speaker: "Alex", side: "a", text: "Yes, I am. Let's go!" }
-    ]
-  },
-  hobbies: {
-    number: "03",
-    title: "Talking about Hobbies",
-    description: "Ask and answer questions about activities you enjoy.",
-    caption: "Friends discover what they like to do after school.",
-    names: ["Alex", "Maya"],
-    dialogues: [
-      { speaker: "Maya", side: "b", text: "What do you like to do, Alex?" },
-      { speaker: "Alex", side: "a", text: "I like playing football. What about you?" },
-      { speaker: "Maya", side: "b", text: "I enjoy drawing and reading comics." },
-      { speaker: "Alex", side: "a", text: "That sounds fun!" }
-    ]
-  }
+const UNITS = {
+  "greetings": {title:"Greetings and Introductions", description:"Meet a new friend and practise a simple English conversation.", caption:"Two students meet for the first time.", names:["Alex","Maya"], lines:[["A","Hi! What's your name?"],["B","Hello! I'm Maya. What's your name?"],["A","I'm Alex. Nice to meet you."],["B","Nice to meet you, too!"]]},
+  "school": {title:"At School", description:"Talk about your classroom, subjects, and school things.", caption:"Two classmates get ready for their English lesson.", names:["Rafi","Nina"], lines:[["A","Good morning, Nina. Are you ready for English?"],["B","Good morning, Rafi. Yes, I am."],["A","Do you have a dictionary?"],["B","Yes. We can use it together."]]},
+  "hobbies": {title:"Talking about Hobbies", description:"Ask a friend what they like doing in their free time.", caption:"Friends share what they enjoy after school.", names:["Dina","Bima"], lines:[["A","What do you like doing in your free time?"],["B","I like drawing. How about you?"],["A","I enjoy playing badminton."],["B","That sounds fun! Let's play this weekend."]]},
+  "daily-routines": {title:"Daily Routines", description:"Describe your day using simple present-tense sentences.", caption:"Two friends compare their morning routines.", names:["Lia","Arman"], lines:[["A","What time do you wake up?"],["B","I wake up at five thirty."],["A","What do you do after breakfast?"],["B","I go to school at six thirty."]]},
+  "directions": {title:"Asking for Directions", description:"Practise asking where a place is and understanding directions.", caption:"A student asks how to find the library.", names:["Niko","Sari"], lines:[["A","Excuse me, where is the library?"],["B","Go straight and turn left."],["A","Is it next to the teachers' room?"],["B","Yes, it is. You can't miss it."]]},
+  "canteen": {title:"At the Canteen", description:"Order food politely and ask about the price.", caption:"A student buys a snack during the break.", names:["Buyer","Seller"], lines:[["A","Good morning. Can I have a sandwich, please?"],["B","Of course. Would you like a drink?"],["A","Yes, one bottle of water, please."],["B","Here you are. That's ten thousand rupiahs."]]},
+  "shopping": {title:"At the Shop", description:"Ask about items, colours, and prices in a shop.", caption:"A customer asks about a school notebook.", names:["Customer","Shopkeeper"], lines:[["A","How much is this notebook?"],["B","It is twelve thousand rupiahs."],["A","Do you have a blue one?"],["B","Yes, here you are."]]},
+  "help": {title:"Asking for Help", description:"Ask for help and respond in a friendly way.", caption:"A classmate helps a friend with a classroom task.", names:["Tono","Alya"], lines:[["A","Could you help me, please?"],["B","Sure. What do you need?"],["A","I don't understand this question."],["B","Let's read it together."]]},
+  "family": {title:"Talking about Family", description:"Introduce family members and describe them simply.", caption:"Friends talk about their families.", names:["Mira","Doni"], lines:[["A","How many people are there in your family?"],["B","There are four people in my family."],["A","Do you have a brother or a sister?"],["B","I have one younger sister."]]},
+  "plans": {title:"Weekend Plans", description:"Talk about plans and invite a friend to join an activity.", caption:"Friends make a plan for Saturday.", names:["Fajar","Putri"], lines:[["A","What are you going to do on Saturday?"],["B","I'm going to visit the town park."],["A","Would you like to go together?"],["B","Sure! What time shall we meet?"],["A","Let's meet at eight in the morning."],["B","Great. See you on Saturday!"]]}
 };
-
-const $ = (id) => document.getElementById(id);
-let currentUnit = "greetings";
-let isPlayingAll = false;
+const $ = id => document.getElementById(id);
+let currentKey = "greetings";
 let speechToken = 0;
-
-function getUnitFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const requested = params.get("unit");
-  return units[requested] ? requested : "greetings";
-}
-
-function renderUnit(key, updateURL = false) {
-  currentUnit = units[key] ? key : "greetings";
-  const unit = units[currentUnit];
-  $("unitBadge").textContent = `UNIT ${unit.number}`;
-  $("unitTitle").textContent = unit.title;
-  $("unitDescription").textContent = unit.description;
-  $("sceneNumber").textContent = `SCENE ${unit.number}`;
-  $("sceneCaption").textContent = unit.caption;
-  $("nameA").textContent = unit.names[0];
-  $("nameB").textContent = unit.names[1];
-  $("unitSelect").value = currentUnit;
-  $("bubbleA").textContent = unit.dialogues.find(d => d.side === "a")?.text || "Hello!";
-  $("bubbleB").textContent = unit.dialogues.find(d => d.side === "b")?.text || "Hi!";
-  $("dialogueList").innerHTML = "";
-
-  unit.dialogues.forEach((line, index) => {
-    const row = document.createElement("article");
-    row.className = "dialogue-row";
-    const icon = document.createElement("div");
-    icon.className = `speaker-icon ${line.side}`;
-    icon.textContent = line.speaker.slice(0, 1);
-    const content = document.createElement("div");
-    content.className = "dialogue-text";
-    const speaker = document.createElement("strong");
-    speaker.textContent = line.speaker;
-    const text = document.createElement("p");
-    text.textContent = line.text;
-    content.append(speaker, text);
-    const play = document.createElement("button");
-    play.className = "play-line";
-    play.type = "button";
-    play.setAttribute("aria-label", `Play line ${index + 1} by ${line.speaker}`);
-    play.textContent = "▶";
-    play.addEventListener("click", () => speakLine(line, index));
-    row.append(icon, content, play);
-    $("dialogueList").append(row);
-  });
-
-  if (updateURL) {
-    const url = new URL(window.location.href);
-    url.searchParams.set("unit", currentUnit);
-    history.pushState({ unit: currentUnit }, "", url);
-  }
-  stopSpeaking();
-}
-
-function setSpeaking(side, text) {
-  $("characterA").classList.toggle("speaking", side === "a");
-  $("characterB").classList.toggle("speaking", side === "b");
-  if (side === "a") $("bubbleA").textContent = text;
-  else $("bubbleB").textContent = text;
-}
-
-function stopSpeaking() {
-  speechToken++;
-  isPlayingAll = false;
-  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-  $("characterA").classList.remove("speaking");
-  $("characterB").classList.remove("speaking");
-}
-
-function speakLine(line, index = 0) {
-  if (!("speechSynthesis" in window)) {
-    alert("Your browser does not support text-to-speech. Please try a recent version of Chrome.");
-    return Promise.resolve();
-  }
-  window.speechSynthesis.cancel();
-  const token = ++speechToken;
-  setSpeaking(line.side, line.text);
-  const utterance = new SpeechSynthesisUtterance(line.text);
-  utterance.lang = "en-US";
-  utterance.rate = 0.82;
-  utterance.pitch = line.side === "a" ? 1.0 : 1.12;
-  return new Promise(resolve => {
-    utterance.onend = () => {
-      if (token === speechToken) {
-        $("characterA").classList.remove("speaking");
-        $("characterB").classList.remove("speaking");
-      }
-      resolve();
-    };
-    utterance.onerror = () => {
-      $("characterA").classList.remove("speaking");
-      $("characterB").classList.remove("speaking");
-      resolve();
-    };
-    window.speechSynthesis.speak(utterance);
-  });
-}
-
-async function playAll() {
-  if (isPlayingAll) { stopSpeaking(); $("playAllBtn").textContent = "▶ Play all"; return; }
-  isPlayingAll = true;
-  $("playAllBtn").textContent = "■ Stop";
-  const token = speechToken;
-  const lines = units[currentUnit].dialogues;
-  for (let i = 0; i < lines.length; i++) {
-    if (!isPlayingAll || token !== speechToken) break;
-    await speakLine(lines[i], i);
-    await new Promise(resolve => setTimeout(resolve, 300));
-  }
-  isPlayingAll = false;
-  $("playAllBtn").textContent = "▶ Play all";
-  $("characterA").classList.remove("speaking");
-  $("characterB").classList.remove("speaking");
-}
-
-$("unitSelect").addEventListener("change", event => renderUnit(event.target.value, true));
-$("playAllBtn").addEventListener("click", playAll);
-$("practiceBtn").addEventListener("click", () => {
-  $("practiceStatus").textContent = "Your turn! Read each line aloud, then practise the conversation with a partner.";
-  $("dialogueList").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-window.addEventListener("popstate", () => renderUnit(getUnitFromURL()));
-renderUnit(getUnitFromURL());
+let practiceIndex = 0;
+function getUnitFromUrl(){const key=new URLSearchParams(location.search).get("unit");return UNITS[key]?key:"greetings";}
+function stopSpeech(){speechToken++;if("speechSynthesis" in window)window.speechSynthesis.cancel();document.querySelectorAll(".character").forEach(el=>el.classList.remove("is-speaking"));document.querySelectorAll(".dialogue-row").forEach(el=>el.classList.remove("active"));}
+function speakLine(index, token=speechToken){const unit=UNITS[currentKey];const line=unit.lines[index];if(!line)return Promise.resolve();if(!("speechSynthesis" in window)){alert("Sorry, this browser does not support speech playback. Please try Chrome or Edge.");return Promise.resolve();}return new Promise(resolve=>{const utterance=new SpeechSynthesisUtterance(line[1]);utterance.lang="en-US";utterance.rate=.86;utterance.pitch=1;const char=line[0]==="A"?$("characterA"):$ ("characterB");char.classList.add("is-speaking");const row=document.querySelector(`[data-line="${index}"]`);if(row)row.classList.add("active");utterance.onend=()=>{char.classList.remove("is-speaking");if(row)row.classList.remove("active");resolve();};utterance.onerror=()=>{char.classList.remove("is-speaking");if(row)row.classList.remove("active");resolve();};if(token!==speechToken){resolve();return;}window.speechSynthesis.speak(utterance);});}
+function renderUnit(key, updateUrl=true){stopSpeech();currentKey=UNITS[key]?key:"greetings";const u=UNITS[currentKey];const idx=Object.keys(UNITS).indexOf(currentKey)+1;$ ("unitBadge").textContent=`UNIT ${String(idx).padStart(2,"0")} / 10`;$ ("unitTitle").textContent=u.title;$ ("unitDescription").textContent=u.description;$ ("sceneNumber").textContent=`SCENE ${String(idx).padStart(2,"0")}`;$ ("nameA").textContent=u.names[0];$ ("nameB").textContent=u.names[1];$ ("bubbleA").textContent=u.lines.find(l=>l[0]==="A")?.[1]||"Let's talk!";$ ("bubbleB").textContent=u.lines.find(l=>l[0]==="B")?.[1]||"Let's talk!";$ ("sceneCaption").textContent=u.caption;$ ("dialogueList").innerHTML="";u.lines.forEach((line,i)=>{const row=document.createElement("div");row.className="dialogue-row";row.dataset.line=i;const dot=document.createElement("div");dot.className="speaker-dot";dot.textContent=line[0];const content=document.createElement("div");content.className="dialogue-text";const name=document.createElement("strong");name.textContent=line[0]==="A"?u.names[0]:u.names[1];const text=document.createElement("p");text.textContent=line[1];content.append(name,text);const button=document.createElement("button");button.className="line-play";button.type="button";button.textContent="▶ Listen";button.setAttribute("aria-label",`Listen to ${name.textContent}: ${line[1]}`);button.addEventListener("click",()=>{stopSpeech();const token=speechToken;speakLine(i,token);});row.append(dot,content,button);$("dialogueList").append(row);});$("practiceStatus").textContent="";practiceIndex=0;if(updateUrl){const url=new URL(location.href);url.searchParams.set("unit",currentKey);history.replaceState({},"",url);}}
+$("unitSelect").innerHTML=Object.entries(UNITS).map(([key,u],i)=>`<option value="${key}">${String(i+1).padStart(2,"0")} · ${u.title}</option>`).join("");
+$("unitSelect").addEventListener("change",e=>{renderUnit(e.target.value);});
+$("playAllBtn").addEventListener("click",async()=>{stopSpeech();const token=speechToken;for(let i=0;i<UNITS[currentKey].lines.length;i++){if(token!==speechToken)break;await speakLine(i,token);}});
+$("practiceBtn").addEventListener("click",async()=>{const role=$("roleSelect").value;const lines=UNITS[currentKey].lines;stopSpeech();const token=speechToken;if(role==="all"){ $("practiceStatus").textContent="Listening mode: play each line, then repeat it aloud.";for(let i=0;i<lines.length;i++){if(token!==speechToken)break;await speakLine(i,token);}return;}const indexes=lines.map((l,i)=>l[0]===role?i:-1).filter(i=>i>=0);if(!indexes.length){$("practiceStatus").textContent="No lines found for this role.";return;}$("practiceStatus").textContent=`Practise ${role==="A"?UNITS[currentKey].names[0]:UNITS[currentKey].names[1]}'s lines. Listen, then repeat aloud.`;for(const i of indexes){if(token!==speechToken)break;await speakLine(i,token);}});
+$("roleSelect").addEventListener("change",()=>{$("practiceStatus").textContent="";});
+window.addEventListener("beforeunload",stopSpeech);
+const initial=getUnitFromUrl();$("unitSelect").value=initial;renderUnit(initial,false);
